@@ -10,8 +10,6 @@ import random
 endpoint = "https://aiaibankby42.cognitiveservices.azure.com/"
 deployment = "gpt-4o"
 
-
-
 # export AI_FOUNDRY_KEY="YOUR KEY"
 subscription_key = os.environ.get('AI_FOUNDRY_KEY')
 api_version = "2024-12-01-preview"

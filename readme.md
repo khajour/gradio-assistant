@@ -9,7 +9,7 @@ This project provides two interfaces for interacting with an AI assistant:
 1. **gradio-app-ui.py** - Web-based chat interface using Gradio
 2. **gradio-app-cli.py** - Command-line interface for direct API interaction
 
-
+ 
 ## Requirements
 
 - Python 3.7+

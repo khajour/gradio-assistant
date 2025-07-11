@@ -7,6 +7,7 @@ import os
 from openai import AzureOpenAI
 import random
 
+
 endpoint = "https://aiaibankby42.cognitiveservices.azure.com/"
 deployment = "gpt-4o"
 
