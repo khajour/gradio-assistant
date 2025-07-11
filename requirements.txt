@@ -1,0 +1,5 @@
+
+openai
+AzureOpenAI
+azure-identity
+gradio
