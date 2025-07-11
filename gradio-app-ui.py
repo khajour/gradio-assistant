@@ -48,7 +48,7 @@ def predict(message, history):
         print("------------------------------------------------------")
         yield "Error: " + str(e)    
 
-demo = gr.ChatInterface(fn=predict, type="messages", theme="soft", title="Finance Assistant", examples=["Teach me Finance and banking", "Translate this into french", "Give me advice on best stock investments"],)
+demo = gr.ChatInterface(fn=predict, type="messages", theme="default", title="Finance Assistant", examples=["Teach me Finance and banking", "Translate this into french", "Give me advice on best stock investments"],)
 
 demo.launch()
 
