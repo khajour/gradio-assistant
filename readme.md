@@ -2,7 +2,7 @@
 
 An AI assistant application with both command-line and web interfaces, powered by Azure AI Foundry and Azure OpenAI's GPT-4o model Gradio.
 
-![Gradio Assistant Web UI Screenshot](assets/screen-001.png)
+<img src="assets/screen-001.png" alt="Gradio Assistant Web UI Screenshot" width="300">
 
 ## Overview
 
