@@ -1,1 +1,4 @@
 .DS_Store
+/infra/dev.tfvars
+/infra/.terraform/
+/infra/.terraform.lock.hcl

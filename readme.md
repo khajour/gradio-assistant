@@ -91,8 +91,53 @@ gradio-assistant/
 ├── gradio-app-ui.py      # Web interface application
 ├── gradio-app-cli.py     # Command-line interface application
 ├── requirements.txt      # Python dependencies
-└── readme.md            # This documentation file
+├── readme.md            # This documentation file
+└── infra/               # Terraform infrastructure
+    ├── main.tf          # Main resource definitions
+    ├── variables.tf     # Input variables
+    ├── dev.tfvars       # Development environment values
+    ├── network.tf       # Network configuration
+    ├── terraform.tf     # Provider configuration
+    └── outputs.tf       # Output values
 ```
+
+## Infrastructure Deployment (Terraform)
+
+The `infra/` directory contains Terraform configuration for deploying Azure AI Foundry infrastructure:
+
+### Components Deployed
+
+- **Azure Resource Group** - Container for all resources
+- **Virtual Network & Subnet** - Network infrastructure with private endpoint support
+- **Azure AI Foundry (Cognitive Services)** - AI services account with GPT-4o model access
+- **Private Network Configuration** - Secure connectivity with disabled public access
+
+### Deployment Commands
+
+```bash
+cd infra/
+
+# Initialize Terraform
+terraform init
+
+# Review deployment plan
+terraform plan -var-file="dev.tfvars"
+
+# Deploy infrastructure
+terraform apply -var-file="dev.tfvars"
+
+# Destroy infrastructure (when needed)
+terraform destroy -var-file="dev.tfvars"
+```
+
+### Required Variables
+
+Configure these values in `dev.tfvars`:
+- `subscription_id` - Azure subscription ID
+- `tenant_id` - Azure tenant ID  
+- `resource_group_name` - Name for the resource group
+- `ai_foundry_name` - Name for the AI Foundry account
+- `location` - Azure region (default: westeurope)
 
 ## Error Handling
 
