@@ -48,14 +48,14 @@ resource "azapi_resource" "ai_foundry_instance" {
         ipRules             = []
       }
 
-      # Remove network injections temporarily to isolate the issue
-      # networkInjections = var.create_ai_agent_service ? [
-      #   {
-      #     scenario                   = "agent"
-      #     subnetArmId                = azurerm_subnet.subnet_pep.id
-      #     useMicrosoftManagedNetwork = false
-      #   }
-      # ] : null
+      # Add network injections  for agents private
+       networkInjections = var.create_ai_agent_service ? [
+         {
+      #    scenario                   = "agent"
+           subnetArmId                = azurerm_subnet.subnet_agents.id
+           useMicrosoftManagedNetwork = false
+         }
+       ] : null
     }
   }
 
@@ -119,5 +119,43 @@ resource "azapi_resource" "model_deployment" {
 
   depends_on = [azapi_resource.ai_project_instance]
   schema_validation_enabled = false
+  tags = var.tags
+}
+
+# #############################################################
+# Create private dns zone for AI Foundry
+# #############################################################
+resource "azurerm_private_dns_zone" "ai_foundry_dns" {
+  name                = "ai.contoso.com"
+  resource_group_name = azurerm_resource_group.rg.name
+
+}
+
+# #############################################################
+# Create dns zone link to  for ai_services vnet
+# #############################################################
+
+resource "azurerm_private_dns_zone_virtual_network_link" "ai_foundry_dns_link" {
+  name                = "${var.ai_foundry_name}-dns-link"
+  resource_group_name = azurerm_resource_group.rg.name
+  private_dns_zone_name = azurerm_private_dns_zone.ai_foundry_dns.name
+  virtual_network_id  = azurerm_virtual_network.vnet_ai_services.id
+}
+
+# Create private endpoint for AI Foundry
+# #############################################################
+resource "azurerm_private_endpoint" "ai_foundry_pe" {
+  name                = "${var.ai_foundry_name}-private-endpoint"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rg.name
+  subnet_id           = azurerm_subnet.subnet_pep.id
+
+  private_service_connection {
+    name                           = "ai-foundry-psc"
+    is_manual_connection           = false
+    private_connection_resource_id = azapi_resource.ai_foundry_instance.id
+    subresource_names              = ["account"]
+  }
+
   tags = var.tags
 }
