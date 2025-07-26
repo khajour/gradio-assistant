@@ -2,6 +2,9 @@ provider "azurerm" {
   features {}
   subscription_id = var.subscription_id
 }
+#################################################################
+# Create Resource Group
+#################################################################
 
 
 resource "azurerm_resource_group" "rg" {
@@ -10,69 +13,111 @@ resource "azurerm_resource_group" "rg" {
   tags     = var.tags
 }
 
-# Create the VNET for Private Endpoint
-resource "azurerm_virtual_network" "vnetmain" {
-  name                = var.virtual_network_name
-  depends_on = [var.resource_group_name]
-  address_space       = [var.vnet_address_space]
-  location            = var.location
-  resource_group_name = azurerm_resource_group.rg.name
-  tags = var.tags
-}
+
+###############################################################
+# Create AI Foundry Instance
+###############################################################
 
 
-
-# Create the Subnet for Private Endpoint
-resource "azurerm_subnet" "subnetmain" {
-  name                 = var.subnet_name
-  depends_on = [azurerm_virtual_network.vnetmain]
-  resource_group_name  =  azurerm_resource_group.rg.name
-  virtual_network_name = var.virtual_network_name
-  address_prefixes     = [var.subnet_address_space]
-  private_link_service_network_policies_enabled = true
-  private_endpoint_network_policies = "Enabled"
-
-}
-
-
-
-resource "azapi_resource" "ai_foundry" {
-  location  = var.location
+resource "azapi_resource" "ai_foundry_instance" {
+  type      = "Microsoft.CognitiveServices/accounts@2025-06-01"
   name      = var.ai_foundry_name
   parent_id = azurerm_resource_group.rg.id
-  type      = "Microsoft.CognitiveServices/accounts@2025-06-01"
+  location  = var.location
+
+  identity {
+    type = "SystemAssigned"
+  }
+
   body = {
-
-    kind = "AIServices",
+    kind = "AIServices"
     sku = {
-      tier = "S0"
+      name = "S0"
     }
-    identity = {
-      type = "SystemAssigned"
-    }
-
     properties = {
-      restore = true
-      disableLocalAuth       = false
+      defaultProject          = var.default_project_name
+      publicNetworkAccess     = "Enabled"
+      restore                 = false
       allowProjectManagement = true
-      customSubDomainName    = var.ai_foundry_name
-      publicNetworkAccess    = var.publicNetworkAccess
+      customSubDomainName     = var.ai_foundry_name
+
+      publicNetworkAccess = "Disabled"  # Set to "Disabled" for private access only
       networkAcls = {
-        defaultAction       = "Allow"
+        defaultAction       = "Deny"
         virtualNetworkRules = []
         ipRules             = []
       }
 
-      # Enable VNet injection for Standard Agents
-      networkInjections = var.create_ai_agent_service ? [
-        {
-          scenario                   = "agent"
-          subnetArmId                = azurerm_subnet.subnetmain.id
-          useMicrosoftManagedNetwork = false
-        }
-      ] : null
+      # Remove network injections temporarily to isolate the issue
+      # networkInjections = var.create_ai_agent_service ? [
+      #   {
+      #     scenario                   = "agent"
+      #     subnetArmId                = azurerm_subnet.subnet_pep.id
+      #     useMicrosoftManagedNetwork = false
+      #   }
+      # ] : null
     }
   }
+
+  depends_on                = [azurerm_resource_group.rg]  # Add explicit dependency
   schema_validation_enabled = false
   tags                      = var.tags
+}
+
+# #############################################################
+# Create AI Project Instance
+# #############################################################
+
+resource "azapi_resource" "ai_project_instance" {
+  location  = var.location
+  name      = var.ai_project_name
+  parent_id = azapi_resource.ai_foundry_instance.id
+  type      = "Microsoft.CognitiveServices/accounts/projects@2025-06-01"
+  
+  body = {
+    identity = {
+      type = "SystemAssigned"
+    }
+    properties = {
+      displayName = var.ai_project_name
+      description = "AI Project for ${var.ai_project_name} workloads"
+    }
+  }
+
+  
+
+  depends_on = [azapi_resource.ai_foundry_instance]
+  schema_validation_enabled = false
+  tags = var.tags
+}
+
+# #############################################################
+# Add o4-mini Model deployment to AI Project
+# #############################################################
+
+resource "azapi_resource" "model_deployment" {
+  location  = var.location
+  name      = "gpt-4o-model_deployment"
+  parent_id = azapi_resource.ai_foundry_instance.id
+  type      = "Microsoft.CognitiveServices/accounts/deployments@2025-06-01"
+
+  body = {
+    properties = {
+      model = {
+        format: "OpenAI"
+        name = "gpt-4o"
+        version = "2024-11-20"
+      }
+      raiPolicyName = "Microsoft.DefaultV2"
+      versionUpgradeOption = "NoAutoUpgrade"
+    }
+    sku = {
+      name = "DataZoneStandard"
+      capacity = 50
+    }
+  }
+
+  depends_on = [azapi_resource.ai_project_instance]
+  schema_validation_enabled = false
+  tags = var.tags
 }

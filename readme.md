@@ -103,41 +103,37 @@ gradio-assistant/
 
 ## Infrastructure Deployment (Terraform)
 
-The `infra/` directory contains Terraform configuration for deploying Azure AI Foundry infrastructure:
+The `infra/` directory contains Terraform configuration for deploying Azure AI Foundry with secure networking:
 
-### Components Deployed
-
-- **Azure Resource Group** - Container for all resources
-- **Virtual Network & Subnet** - Network infrastructure with private endpoint support
-- **Azure AI Foundry (Cognitive Services)** - AI services account with GPT-4o model access
-- **Private Network Configuration** - Secure connectivity with disabled public access
-
-### Deployment Commands
+### Quick Deploy
 
 ```bash
 cd infra/
-
-# Initialize Terraform
 terraform init
-
-# Review deployment plan
-terraform plan -var-file="dev.tfvars"
-
-# Deploy infrastructure
 terraform apply -var-file="dev.tfvars"
-
-# Destroy infrastructure (when needed)
-terraform destroy -var-file="dev.tfvars"
 ```
 
-### Required Variables
+### Infrastructure Components
 
-Configure these values in `dev.tfvars`:
-- `subscription_id` - Azure subscription ID
-- `tenant_id` - Azure tenant ID  
-- `resource_group_name` - Name for the resource group
-- `ai_foundry_name` - Name for the AI Foundry account
-- `location` - Azure region (default: westeurope)
+- **Azure AI Foundry** - GPT-4o model access with private networking
+- **Virtual Network** - Private endpoints and agent subnets
+- **Storage & Key Vault** - Supporting services for AI Foundry
+- **Network Security** - Private access only, public access disabled
+
+### Required Configuration
+
+Update `dev.tfvars` with your Azure details:
+```bash
+subscription_id = "your-subscription-id"
+tenant_id      = "your-tenant-id"
+resource_group_name = "rg-assistant"
+```
+
+### Cleanup
+
+```bash
+terraform destroy -var-file="dev.tfvars"
+```
 
 ## Error Handling
 

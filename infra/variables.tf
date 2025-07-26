@@ -43,23 +43,34 @@ variable "tags" {
   default     = {}
 }
 
-variable "virtual_network_name" {
+variable "vnet_ai_services_name" {
   type        = string
   description = "Name of the virtual network for private endpoints"
 }
-variable "vnet_address_space" {
+variable "vnet_ai_services_address_space" {
   type        = string
   description = "Address space for the virtual network"
 }
-variable "subnet_name" {
+variable "subnet_pep_name" {
   type        = string
   description = "Name of the subnet for private endpoints"
 }
 
-variable "subnet_address_space" {
+variable "subnet_pep_address_space" {
   type        = string
   description = "Address space for the subnet for private endpoints"
 }
+
+variable "subnet_agents_name" {
+  type        = string
+  description = "Name of the subnet for agents"
+}
+
+variable "subnet_agents_address_space" {
+  type        = string
+  description = "Address space for the subnet for agents"
+}
+
 
 variable "publicNetworkAccess" {
   type        = string
@@ -77,4 +88,21 @@ variable "create_ai_agent_service" {
   type        = bool
   description = "Flag to create AI Agent service with VNet injection"
   default     = false
+}
+
+variable "ai_project_name" {
+  type        = string
+  description = "Name of the AI project"
+  default     = "project-001"
+}
+
+variable "default_project_name" {
+  type        = string
+  description = "Name of the default AI project"
+  default     = "project-default-001"
+}
+variable "nsg_main_name" {
+  type        = string
+  description = "Name of the main Network Security Group"
+  default     = "nsg-main"
 }
