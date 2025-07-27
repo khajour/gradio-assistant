@@ -71,7 +71,7 @@ The CLI version provides a simple way to get responses directly in your terminal
 
 Both applications are pre-configured with the following settings:
 
-- **Endpoint:** `https://aiaibankby42.cognitiveservices.azure.com/`
+- **Endpoint:** `https://ai-foundry-instance.cognitiveservices.azure.com/`
 - **Model:** `gpt-4o`
 - **API Version:** `2024-12-01-preview`
 - **Temperature:** `0.3` (for consistent, focused responses)
