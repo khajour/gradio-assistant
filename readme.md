@@ -105,6 +105,9 @@ gradio-assistant/
 
 The `infra/` directory contains Terraform configuration for deploying Azure AI Foundry with secure networking:
 
+<img src="assets/ai-foundry-architecture.png" alt="Gradio Assistant Web UI Screenshot" width="600">
+
+
 ### Quick Deploy
 
 ```bash
