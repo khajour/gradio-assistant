@@ -2,9 +2,65 @@
 
 An AI assistant application with both command-line and web interfaces, powered by Azure AI Foundry and Azure OpenAI's GPT-4o model Gradio.
 
-<img src="assets/screen-001.png" alt="Gradio Assistant Web UI Screenshot" width="300">
 
-## Overview
+## File Structure
+
+```
+gradio-assistant/
+├── gradio-app-ui.py      # Web interface application
+├── gradio-app-cli.py     # Command-line interface application
+├── requirements.txt      # Python dependencies
+├── readme.md            # This documentation file
+└── infra/               # Terraform infrastructure
+    ├── main.tf          # Main resource definitions
+    ├── variables.tf     # Input variables
+    ├── dev.tfvars       # Development environment values
+    ├── network.tf       # Network configuration
+    ├── terraform.tf     # Provider configuration
+    └── outputs.tf       # Output values
+```
+
+## Infrastructure Deployment (Terraform)
+
+The `infra/` directory contains Terraform configuration for deploying Azure AI Foundry with secure networking:
+
+<img src="assets/ai-foundry-architecture.png" alt="Gradio Assistant Web UI Screenshot" width="600">
+
+
+### Quick Deploy
+
+```bash
+cd infra/
+terraform init
+terraform apply -var-file="dev.tfvars"
+```
+
+### Infrastructure Components
+
+- **Azure AI Foundry** - GPT-4o model access with private networking
+- **Virtual Network** - Private endpoints and agent subnets
+- **Storage & Key Vault** - Supporting services for AI Foundry
+- **Network Security** - Private access only, public access disabled
+
+### Required Configuration
+
+Update `dev.tfvars` with your Azure details:
+```bash
+subscription_id = "your-subscription-id"
+tenant_id      = "your-tenant-id"
+resource_group_name = "rg-assistant"
+```
+
+### Cleanup
+
+```bash
+terraform destroy -var-file="dev.tfvars"
+```
+
+
+## UI Overview
+
+<img src="assets/screen-001.png" alt="Gradio Assistant Web UI Screenshot" width="300">
 
 This project provides two interfaces for interacting with an AI assistant:
 
@@ -84,59 +140,7 @@ Both applications are pre-configured with the following settings:
 |----------|-------------|----------|
 | `AI_FOUNDRY_KEY` | Your Azure OpenAI API key | Yes |
 
-## File Structure
 
-```
-gradio-assistant/
-├── gradio-app-ui.py      # Web interface application
-├── gradio-app-cli.py     # Command-line interface application
-├── requirements.txt      # Python dependencies
-├── readme.md            # This documentation file
-└── infra/               # Terraform infrastructure
-    ├── main.tf          # Main resource definitions
-    ├── variables.tf     # Input variables
-    ├── dev.tfvars       # Development environment values
-    ├── network.tf       # Network configuration
-    ├── terraform.tf     # Provider configuration
-    └── outputs.tf       # Output values
-```
-
-## Infrastructure Deployment (Terraform)
-
-The `infra/` directory contains Terraform configuration for deploying Azure AI Foundry with secure networking:
-
-<img src="assets/ai-foundry-architecture.png" alt="Gradio Assistant Web UI Screenshot" width="600">
-
-
-### Quick Deploy
-
-```bash
-cd infra/
-terraform init
-terraform apply -var-file="dev.tfvars"
-```
-
-### Infrastructure Components
-
-- **Azure AI Foundry** - GPT-4o model access with private networking
-- **Virtual Network** - Private endpoints and agent subnets
-- **Storage & Key Vault** - Supporting services for AI Foundry
-- **Network Security** - Private access only, public access disabled
-
-### Required Configuration
-
-Update `dev.tfvars` with your Azure details:
-```bash
-subscription_id = "your-subscription-id"
-tenant_id      = "your-tenant-id"
-resource_group_name = "rg-assistant"
-```
-
-### Cleanup
-
-```bash
-terraform destroy -var-file="dev.tfvars"
-```
 
 ## Error Handling
 
