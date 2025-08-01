@@ -106,3 +106,24 @@ variable "nsg_main_name" {
   description = "Name of the main Network Security Group"
   default     = "nsg-main"
 }
+
+variable "subnet_jumpbox_name" {
+  type        = string
+  description = "Name of the subnet for jumpbox"
+}
+
+variable "subnet_jumpbox_address_space" {
+  type        = string
+  description = "Address space for the subnet for jumpbox"
+}
+
+
+variable "subnet_bastion_name" {
+  type        = string
+  description = "Name of the subnet for bastion host"
+}
+
+variable "subnet_bastion_address_space" {
+  type        = string
+  description = "Address space for the subnet for bastion host"
+}

@@ -2,15 +2,20 @@
 
 An AI assistant application with both command-line and web interfaces, powered by Azure AI Foundry and Azure OpenAI's GPT-4o model Gradio.
 
+this repo is a simple example of https://github.com/mbilalamjad/openai-end-to-end-baseline
 
 ## File Structure
 
 ```
 gradio-assistant/
-├── gradio-app-ui.py      # Web interface application
-├── gradio-app-cli.py     # Command-line interface application
-├── requirements.txt      # Python dependencies
+├── app/                 # Gradio Application code
+│   ├── gradio-app-ui.py     # Web interface application
+│   ├── gradio-app-cli.py    # Command-line interface application
+│   └── requirements.txt     # Python dependencies
 ├── readme.md            # This documentation file
+├── assets/              # Documentation assets
+│   ├── ai-foundry-architecture.png
+│   └── screen-001.png
 └── infra/               # Terraform infrastructure
     ├── main.tf          # Main resource definitions
     ├── variables.tf     # Input variables
@@ -77,9 +82,10 @@ This project provides two interfaces for interacting with an AI assistant:
 ## Installation
 
 1. Clone or download this repository
-2. Install the required dependencies:
+2. Navigate to the app directory and install the required dependencies:
 
 ```bash
+cd app/
 pip install -r requirements.txt
 ```
 
@@ -96,6 +102,7 @@ export AI_FOUNDRY_KEY="your_azure_openai_api_key_here"
 The web interface provides an interactive chat experience with predefined examples.
 
 ```bash
+cd app/
 ./gradio-app-ui.py
 ```
 
@@ -116,6 +123,7 @@ The web interface provides an interactive chat experience with predefined exampl
 The CLI version provides a simple way to get responses directly in your terminal.
 
 ```bash
+cd app/
 ./gradio-app-cli.py
 ```
 
@@ -175,4 +183,6 @@ Both applications include comprehensive error handling:
 
 ## License
 
-This project is provided as-is for educational and development purposes. 
+This project is provided as-is for educational and development purposes.
+
+

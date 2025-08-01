@@ -2,3 +2,4 @@
 /infra/dev.tfvars
 /infra/.terraform/
 /infra/.terraform.lock.hcl
+/infra/terraform.tfstate
