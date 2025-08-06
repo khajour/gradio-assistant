@@ -41,19 +41,17 @@ resource "azapi_resource" "ai_foundry_instance" {
     }
     properties = {
       defaultProject         = var.default_project_name
-      publicNetworkAccess    = "Enabled"
       restore                = false
       allowProjectManagement = true
       customSubDomainName    = var.ai_foundry_name
 
-      publicNetworkAccess = "Enabled" # Set to "Disabled" for private access only
+      publicNetworkAccess    = "Disabled"
       networkAcls = {
         defaultAction       = "Deny"
         virtualNetworkRules = [
           {
             id = azurerm_subnet.subnet_jumpbox.id
             ignoreMissingVnetServiceEndpoint = true
-          
           },
                     {
             id = azurerm_subnet.subnet_pep.id
@@ -207,7 +205,7 @@ resource "azurerm_windows_virtual_machine" "vm-jumpbox" {
   size                = "Standard_B4as_v2"
   admin_username      = "azure-user"
   admin_password      = random_password.vm_jumpbox_admin_password.result
-  
+
   network_interface_ids = [
     azurerm_network_interface.nic1.id,
   ]
