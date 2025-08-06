@@ -42,12 +42,11 @@ resource "azurerm_subnet" "subnet_jumpbox" {
 
 # Network Security Group for additional security
 resource "azurerm_network_security_group" "nsg_main" {
-  name                = "var.nsg_main"
+  name                = "nsg_main"
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
   tags                = var.tags
 
-  # Allow Azure service communication
   security_rule {
     name                       = "AllowAzureCloud"
     priority                   = 500
@@ -60,7 +59,6 @@ resource "azurerm_network_security_group" "nsg_main" {
     destination_address_prefix = "AzureCloud"
   }
 
-  # Deny all other inbound traffic
   security_rule {
     name                       = "AllowOutboundInternet"
     priority                   = 600
@@ -73,6 +71,7 @@ resource "azurerm_network_security_group" "nsg_main" {
     destination_address_prefix = "Internet"
   }
 }
+
 
 # Associate NSG with subnet
 resource "azurerm_subnet_network_security_group_association" "nsg_association_001" {
@@ -91,6 +90,7 @@ resource "azurerm_subnet_network_security_group_association" "nsg_association_00
   subnet_id                 = azurerm_subnet.subnet_jumpbox.id
   network_security_group_id = azurerm_network_security_group.nsg_main.id
 }
+
 
 
 resource "azurerm_private_dns_zone" "vault_dns_zone" {

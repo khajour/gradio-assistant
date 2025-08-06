@@ -189,9 +189,13 @@ resource "azurerm_network_interface" "nic1" {
   resource_group_name = azurerm_resource_group.rg.name
 
   ip_configuration {
-    name                          = "internal"
+    name                          = "primary"
+    primary                       = true
+    private_ip_address_version    = "IPv4"
+    public_ip_address_id          = null
     subnet_id                     = azurerm_subnet.subnet_jumpbox.id
     private_ip_address_allocation = "Dynamic"
+    
   }
 }
 
@@ -200,9 +204,10 @@ resource "azurerm_windows_virtual_machine" "vm-jumpbox" {
   name                = "vm-jumpbox"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  size                = "Standard_D4as_v5"
+  size                = "Standard_B4as_v2"
   admin_username      = "azure-user"
   admin_password      = random_password.vm_jumpbox_admin_password.result
+  
   network_interface_ids = [
     azurerm_network_interface.nic1.id,
   ]
@@ -214,9 +219,9 @@ resource "azurerm_windows_virtual_machine" "vm-jumpbox" {
   }
 
   source_image_reference {
-    publisher = "MicrosoftWindowsDesktop"
-    offer     = "windows-11"
-    sku       = "win11-21h2-avd"
+    publisher = "MicrosoftWindowsServer"
+    offer     = "WindowsServer"
+    sku       = "2025-Datacenter"
     version   = "latest"
   }
 
