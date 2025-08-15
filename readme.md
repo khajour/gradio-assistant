@@ -1,8 +1,8 @@
 # Gradio Assistant
 
-An AI assistant application with both command-line and web interfaces, powered by Azure AI Foundry and Azure OpenAI's GPT-4o model Gradio.
+An AI assistant application with both command-line and web interfaces, powered by Azure AI Foundry, Azure OpenAI's GPT-4o model and Gradio user interface.
 
-this repo is a simple example of https://github.com/mbilalamjad/openai-end-to-end-baseline
+Gradio Assistant is a secure and full private Terraform implemetation of the following AI guidelines: https://github.com/Azure/AI-Landing-Zones
 
 ## File Structure
 

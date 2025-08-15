@@ -127,3 +127,18 @@ variable "subnet_bastion_address_space" {
   type        = string
   description = "Address space for the subnet for bastion host"
 }
+
+variable "subnet_vpn_name" {
+  type        = string
+  description = "Name of the subnet for VPN"
+}
+
+variable "subnet_vpn_address_space" {
+  type        = string
+  description = "Address space for the subnet for VPN"
+}
+
+variable "vpn_client_address_pool" {
+  type        = list(string)
+  description = "Address pool for the VPN client"
+}
