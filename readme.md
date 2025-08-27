@@ -8,21 +8,31 @@ Gradio Assistant is a secure and full private Terraform implemetation of the fol
 
 ```
 gradio-assistant/
-├── app/                 # Gradio Application code
-│   ├── gradio-app-ui.py     # Web interface application
-│   ├── gradio-app-cli.py    # Command-line interface application
-│   └── requirements.txt     # Python dependencies
-├── readme.md            # This documentation file
-├── assets/              # Documentation assets
+├── .gitignore
+├── LICENSE
+├── readme.md                # This documentation file
+├── app/                     # Gradio application code
+│   ├── gradio-app-ui.py         # Web interface application
+│   ├── gradio-app-cli.py        # Command-line interface application
+│   └── requirements.txt         # Python dependencies
+├── assets/                  # Documentation assets
 │   ├── ai-foundry-architecture.png
 │   └── screen-001.png
-└── infra/               # Terraform infrastructure
-    ├── main.tf          # Main resource definitions
-    ├── variables.tf     # Input variables
-    ├── dev.tfvars       # Development environment values
-    ├── network.tf       # Network configuration
-    ├── terraform.tf     # Provider configuration
-    └── outputs.tf       # Output values
+└── infra/                   # Terraform infrastructure (Azure AI Foundry, networking, security)
+    ├── .terraform.lock.hcl      # Terraform provider lockfile (auto-generated)
+    ├── ai-foundry.tf            # AI Foundry workspace and model deployments
+    ├── bastion.tf               # Azure Bastion configuration (optional)
+    ├── deploy.sh                # Helper script to init/plan/apply
+    ├── dev.tfvars               # Development environment values
+    ├── jumpbox.tf               # Jumpbox VM and related resources (optional)
+    ├── keyvault.tf              # Key Vault for secrets and keys
+    ├── main.tf                  # Root module composition
+    ├── network.tf               # Virtual network, subnets, private endpoints
+    ├── outputs.tf               # Output values
+    ├── terraform.tf             # Provider/backend configuration
+    ├── terraform.tfstate        # State file (generated)
+    ├── terraform.tfstate.backup # State backup (generated)
+    └── variables.tf             # Input variables
 ```
 
 ## Infrastructure Deployment (Terraform)

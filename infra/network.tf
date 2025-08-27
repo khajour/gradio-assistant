@@ -14,7 +14,6 @@ resource "azurerm_subnet" "subnet_pep" {
     resource_group_name                           = azurerm_resource_group.rg.name
     virtual_network_name                          = azurerm_virtual_network.vnet_ai_services.name
     address_prefixes                              = [var.subnet_pep_address_space]
-    service_endpoints                              = ["Microsoft.CognitiveServices"]
 
 }
 
@@ -24,7 +23,6 @@ resource "azurerm_subnet" "subnet_agents" {
     resource_group_name                           = azurerm_resource_group.rg.name
     virtual_network_name                          = azurerm_virtual_network.vnet_ai_services.name
     address_prefixes                              = [var.subnet_agents_address_space]
-
 }
 
 # Create the Subnet for jumbox
@@ -33,7 +31,6 @@ resource "azurerm_subnet" "subnet_jumpbox" {
     resource_group_name                           = azurerm_resource_group.rg.name
     virtual_network_name                          = azurerm_virtual_network.vnet_ai_services.name
     address_prefixes                              = [var.subnet_jumpbox_address_space]
-    service_endpoints                              = ["Microsoft.CognitiveServices"] ## Add service endpoint for Cognitive Services to enable firewall access from cognitive services
 }
 
 # Create the Subnet for Bastion Host 
@@ -42,7 +39,6 @@ resource "azurerm_subnet" "AzureBastionSubnet" {
     resource_group_name                           = azurerm_resource_group.rg.name
     virtual_network_name                          = azurerm_virtual_network.vnet_ai_services.name
     address_prefixes                              = [var.subnet_bastion_address_space]
-
 }
 
 # Create the Subnet for VPN Gateway
@@ -83,6 +79,33 @@ resource "azurerm_network_security_group" "nsg_main" {
     source_address_prefix      = "*"
     destination_address_prefix = "Internet"
   }
+
+  security_rule {
+    name                       = "AllowRDPInboundInternet"
+    priority                   = 700
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "3389"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "AllowAzureCloud"
+    priority                   = 800
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "Internet"
+    destination_address_prefix = "VirtualNetwork"
+  }
+
+  
+
 }
 
 # Associate NSG with subnet
