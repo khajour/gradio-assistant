@@ -19,10 +19,8 @@ gradio-assistant/
 │   ├── ai-foundry-architecture.png
 │   └── screen-001.png
 └── infra/                   # Terraform infrastructure (Azure AI Foundry, networking, security)
-    ├── .terraform.lock.hcl      # Terraform provider lockfile (auto-generated)
     ├── ai-foundry.tf            # AI Foundry workspace and model deployments
     ├── bastion.tf               # Azure Bastion configuration (optional)
-    ├── deploy.sh                # Helper script to init/plan/apply
     ├── dev.tfvars               # Development environment values
     ├── jumpbox.tf               # Jumpbox VM and related resources (optional)
     ├── keyvault.tf              # Key Vault for secrets and keys
@@ -30,8 +28,6 @@ gradio-assistant/
     ├── network.tf               # Virtual network, subnets, private endpoints
     ├── outputs.tf               # Output values
     ├── terraform.tf             # Provider/backend configuration
-    ├── terraform.tfstate        # State file (generated)
-    ├── terraform.tfstate.backup # State backup (generated)
     └── variables.tf             # Input variables
 ```
 
