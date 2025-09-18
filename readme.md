@@ -1,6 +1,6 @@
 # Gradio Assistant
 
-An AI assistant application with both command-line and web interfaces, powered by Azure AI Foundry, Azure OpenAI's GPT-4o model and Gradio user interface.
+Gradio Assistant is an AI assistant application with both command-line and web interfaces, powered by Azure AI Foundry, Azure OpenAI's GPT-4o model and Gradio user interface.
 
 Gradio Assistant is a secure and full private Terraform implemetation of the following AI guidelines: https://github.com/Azure/AI-Landing-Zones
 
@@ -18,22 +18,23 @@ gradio-assistant/
 ├── assets/                  # Documentation assets
 │   ├── ai-foundry-architecture.png
 │   └── screen-001.png
-└── infra/                   # Terraform infrastructure (Azure AI Foundry, networking, security)
-    ├── ai-foundry.tf            # AI Foundry workspace and model deployments
-    ├── bastion.tf               # Azure Bastion configuration (optional)
-    ├── dev.tfvars               # Development environment values
-    ├── jumpbox.tf               # Jumpbox VM and related resources (optional)
-    ├── keyvault.tf              # Key Vault for secrets and keys
-    ├── main.tf                  # Root module composition
-    ├── network.tf               # Virtual network, subnets, private endpoints
-    ├── outputs.tf               # Output values
-    ├── terraform.tf             # Provider/backend configuration
-    └── variables.tf             # Input variables
+└── foundry/                  # Terraform infrastructure (Azure AI Foundry, networking, security)
+   ├── ai-foundry.tf            # AI Foundry workspace and model deployments
+   ├── bastion.tf               # Azure Bastion configuration (optional)
+   ├── dev.tfvars               # Development environment values
+   ├── jumpbox.tf               # Jumpbox VM and related resources (optional)
+   ├── keyvault.tf              # Key Vault for secrets and keys
+   ├── main.tf                  # Root module composition
+   ├── network.tf               # Virtual network, subnets, private endpoints
+   ├── outputs.tf               # Output values
+   ├── terraform.tf             # Provider/backend configuration
+   └── variables.tf             # Input variables
 ```
+
 
 ## Infrastructure Deployment (Terraform)
 
-The `infra/` directory contains Terraform configuration for deploying Azure AI Foundry with secure networking:
+The `foundry/` directory contains Terraform configuration for deploying Azure AI Foundry with secure networking, private endpoints, and customer-managed keys (CMK) via Azure Key Vault:
 
 <img src="assets/ai-foundry-architecture.png" alt="Gradio Assistant Web UI Screenshot" width="600">
 
@@ -46,11 +47,12 @@ terraform init
 terraform apply -var-file="dev.tfvars"
 ```
 
+
 ### Infrastructure Components
 
 - **Azure AI Foundry** - GPT-4o model access with private networking
 - **Virtual Network** - Private endpoints and agent subnets
-- **Storage & Key Vault** - Supporting services for AI Foundry
+- **Key Vault & CMK** - Customer-managed keys for encryption, with explicit role assignments for access
 - **Network Security** - Private access only, public access disabled
 
 ### Required Configuration
@@ -172,6 +174,7 @@ Both applications include comprehensive error handling:
 - The web interface maintains conversation history within the session
 - The CLI interface processes single queries (can be extended for interactive mode)
 
+
 ## Troubleshooting
 
 1. **"API key not found" error:**
@@ -186,6 +189,15 @@ Both applications include comprehensive error handling:
 3. **Import errors:**
    - Ensure all requirements are installed: `pip install -r requirements.txt`
    - Check Python version compatibility
+
+4. **Terraform update fails with `ApiPropertiesInvalid` or `qnaAzureSearchEndpointKey` error:**
+   - Azure may require `apiProperties.qnaAzureSearchEndpointKey` to be set (even if unused). In your `azapi_update_resource` block, add:
+     ```hcl
+     apiProperties = {
+       qnaAzureSearchEndpointKey = ""
+     }
+     ```
+   - See `foundry/ai-foundry.tf` for an example.
 
 ## License
 

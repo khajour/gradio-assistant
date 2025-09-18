@@ -8,8 +8,8 @@ resource "random_password" "vm_jumpbox_admin_password" {
 # Create Network Interfaces
 resource "azurerm_network_interface" "nic1" {
   name                = "nic1-vm-jumpbox"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
   ip_configuration {
     name                          = "primary"
@@ -25,8 +25,8 @@ resource "azurerm_network_interface" "nic1" {
 # Create Windows Virtual Machine
 resource "azurerm_windows_virtual_machine" "vm-jumpbox" {
   name                = "vm-jumpbox"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  resource_group_name = var.resource_group_name
+  location            = var.location
   size                = "Standard_B4as_v2"
   admin_username      = "azure-user"
   admin_password      = random_password.vm_jumpbox_admin_password.result

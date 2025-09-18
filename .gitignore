@@ -1,6 +1,6 @@
 .DS_Store
-/infra/dev.tfvars
-/infra/.terraform/
-/infra/.terraform.lock.hcl
-/infra/terraform.tfstate
-/infra/terraform.tfstate.backup
+/*/dev.tfvars
+/*/.terraform/
+/*/.terraform.lock.hcl
+/*/terraform.tfstate
+/*/terraform.tfstate.backup

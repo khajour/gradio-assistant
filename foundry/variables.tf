@@ -20,11 +20,6 @@ variable "storage_account_name" {
   description = "Name of the storage account used by AI Foundry"
 }
 
-variable "keyvault_name" {
-  type        = string
-  description = "Name of the keyvault account used by AI Foundry"
-}
-
 
 variable "subscription_id" {
   type        = string
