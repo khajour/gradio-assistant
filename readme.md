@@ -42,7 +42,7 @@ The `foundry/` directory contains Terraform configuration for deploying Azure AI
 ### Quick Deploy
 
 ```bash
-cd infra/
+cd foundry/
 terraform init
 terraform apply -var-file="dev.tfvars"
 ```

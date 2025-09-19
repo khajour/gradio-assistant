@@ -1,22 +1,31 @@
 #!/usr/bin/env python3
 
-import gradio as gr
-#import aifprivate as ai_foundry
+import logging
 import time
 import os
-from openai import AzureOpenAI
 import random
 
-endpoint = "https://aiaibankby42.services.ai.azure.com/"
-deployment = "gpt-4o"
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+from openai import AzureOpenAI
 
-# export AI_FOUNDRY_KEY="YOUR KEY"
-subscription_key = os.environ.get('AI_FOUNDRY_KEY')
+endpoint = "https://aif-assistant.cognitiveservices.azure.com/"
+deployment = "gpt-4o-model_deployment"
 api_version = "2024-12-01-preview"
+
+logging.basicConfig(level=logging.WARNING)
+
+# Set up Azure AD token provider
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(), 
+    "https://cognitiveservices.azure.com/.default"
+    )
+
+# Initialize the Azure OpenAI client with Azure AD authentication
+# Make sure you added <Cognitive Services OpenAI Contributor> role to your user in the portal for AI Foundry instance
 client = AzureOpenAI(
     api_version=api_version,
     azure_endpoint=endpoint,
-    api_key=subscription_key,
+    azure_ad_token_provider=token_provider
 )
 
 def predict(message):
