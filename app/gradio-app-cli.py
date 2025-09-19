@@ -22,6 +22,7 @@ token_provider = get_bearer_token_provider(
 
 # Initialize the Azure OpenAI client with Azure AD authentication
 # Make sure you added <Cognitive Services OpenAI Contributor> role to your user in the portal for AI Foundry instance
+# run az login if you are not logged in
 client = AzureOpenAI(
     api_version=api_version,
     azure_endpoint=endpoint,
